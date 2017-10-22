@@ -1,6 +1,14 @@
 # Ignore everything
+
 *
 
+
+
 # Except
+
+
 !*.py
+
 !*.ipynb
+
+!README.md
