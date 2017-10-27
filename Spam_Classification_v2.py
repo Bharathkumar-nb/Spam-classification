@@ -56,11 +56,36 @@ X_train = vectorizer.fit_transform(X_train_raw)
 classifier = LogisticRegression()
 classifier.fit(X_train, y_train)
 
-X_test = vectorizer.transform(X_test_raw)
+# X_test = vectorizer.transform(X_test_raw)
+# predictions = classifier.predict(X_test)
+
+# print(list(zip(predictions, y_test))[:20])
+# print(accuracy_score(predictions, y_test))
+# print(zero_one_loss(predictions, y_test))
+
+
+
+ham_file = os.path.join(os.getcwd(),'Dataset', 'lingspam_public', 'ham.csv')
+spam_file = os.path.join(os.getcwd(),'Dataset', 'lingspam_public', 'spam.csv')
+
+
+ham_df = pd.read_csv(ham_file)
+ham_df['label'] = 0
+
+spam_df = pd.read_csv(spam_file)
+spam_df['label'] = 1
+
+df = pd.concat([ham_df, spam_df])
+
+df.dropna(inplace=True)
+
+df = df.sample(frac=1)
+
+print(df)
+
+X_test = vectorizer.transform(df['content'])
 predictions = classifier.predict(X_test)
 
-print(list(zip(predictions, y_test))[:20])
-print(accuracy_score(predictions, y_test))
-print(zero_one_loss(predictions, y_test))
-
-
+print(list(zip(predictions, df['label']))[:20])
+print(accuracy_score(predictions, df['label']))
+print(zero_one_loss(predictions, df['label']))
