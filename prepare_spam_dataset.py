@@ -1,5 +1,6 @@
 # imports:
-import time;
+import sys
+import time
 import datetime
 import logging
 import os
@@ -13,6 +14,10 @@ from nltk.corpus import stopwords
 logging.basicConfig(format='%(levelname)s : %(message)s', level=logging.INFO)
 logging.root.level = logging.INFO
 
+if len(sys.argv) != 3:
+    print('File Usage: python prepare_spam_dataset.py <src-folder> <dst-file>')
+    print('Location of <src-folder>|<dst-file> : Dataset/')
+    sys.exit(0)
 
 def get_text_from_email(msg, file_name):
     parts = {}
@@ -38,36 +43,20 @@ def get_text_from_email(msg, file_name):
     return parts
 
 
-ham_folder = os.path.join(os.getcwd(),'Dataset', 'Ham')
-spam_folder = os.path.join(os.getcwd(),'Dataset', '2004')
+spam_folder = os.path.join(os.getcwd(),'Dataset', sys.argv[1])
 
-ham_list = []
 spam_list = []
 
-for subdir, dirs, files in os.walk(ham_folder):
-    for file in files:
-        with open(os.path.join(subdir, file), encoding='latin-1') as f:
-            ham_list.append(get_text_from_email(email.message_from_file(f), file))
-
 for subdir, dirs, files in os.walk(spam_folder):
-    for file in files:
+    for filename in files:
         try:
-            with open(os.path.join(subdir, file), encoding='latin-1') as f:
-                spam_list.append(get_text_from_email(email.message_from_file(f), file))
+            with open(os.path.join(subdir, filename),encoding='latin-1') as f:
+                spam_list.append(get_text_from_email(email.message_from_file(f), filename))
         except OSError:
             pass
 
-
-print(len(ham_list))
-df = pd.DataFrame(ham_list)
-ham_file = os.path.join(os.getcwd(),'Dataset','ham_new.csv')
-df.to_csv(ham_file)
-ham_file = os.path.join(os.getcwd(),'Dataset','ham_latin.csv')
-df.to_csv(ham_file,encoding='latin-1')
-print(len(spam_list))
-
 df = pd.DataFrame(spam_list)
-spam_file = os.path.join(os.getcwd(),'Dataset','spam_new.csv')
+spam_file = os.path.join(os.getcwd(),'Dataset', sys.argv[2])
 df.to_csv(spam_file)
-spam_file = os.path.join(os.getcwd(),'Dataset','spam_latin.csv')
-df.to_csv(spam_file,encoding='latin-1')
+
+

@@ -46,12 +46,14 @@ df.dropna(inplace=True)
 
 df = df.sample(frac=1)
 
-print(df)
+# print(df)
 
 X_train_raw, X_test_raw, y_train, y_test = train_test_split(df['content'],df['label'])
 
 vectorizer = CountVectorizer(stop_words='english', ngram_range=(1, 2))
 X_train = vectorizer.fit_transform(X_train_raw)
+
+print('Training')
 
 classifier = LogisticRegression()
 classifier.fit(X_train, y_train)
@@ -62,7 +64,6 @@ classifier.fit(X_train, y_train)
 # print(list(zip(predictions, y_test))[:20])
 # print(accuracy_score(predictions, y_test))
 # print(zero_one_loss(predictions, y_test))
-
 
 
 ham_file = os.path.join(os.getcwd(),'Dataset', 'lingspam_public', 'ham.csv')
@@ -81,11 +82,58 @@ df.dropna(inplace=True)
 
 df = df.sample(frac=1)
 
-print(df)
+# print(df)
+
+print('Lingspam')
+X_test = vectorizer.transform(df['content'])
+predictions = classifier.predict(X_test)
+
+# print(list(zip(predictions, df['label']))[:20])
+print(accuracy_score(predictions, df['label']))
+print(zero_one_loss(predictions, df['label']))
+
+
+print('2005_spam.csv')
+spam_file = os.path.join(os.getcwd(),'Dataset', '2005_spam.csv')
+df = pd.read_csv(spam_file)
+df['label'] = 1
+df.dropna(inplace=True)
+
+# print(df)
 
 X_test = vectorizer.transform(df['content'])
 predictions = classifier.predict(X_test)
 
-print(list(zip(predictions, df['label']))[:20])
+# print(list(zip(predictions, df['label']))[:20])
+print(accuracy_score(predictions, df['label']))
+print(zero_one_loss(predictions, df['label']))
+
+print('2006_spam.csv')
+spam_file = os.path.join(os.getcwd(),'Dataset', '2006_spam.csv')
+df = pd.read_csv(spam_file)
+df['label'] = 1
+df.dropna(inplace=True)
+
+# print(df)
+
+X_test = vectorizer.transform(df['content'])
+predictions = classifier.predict(X_test)
+
+# print(list(zip(predictions, df['label']))[:20])
+print(accuracy_score(predictions, df['label']))
+print(zero_one_loss(predictions, df['label']))
+
+print('2010_spam.csv')
+spam_file = os.path.join(os.getcwd(),'Dataset', '2010_spam.csv')
+df = pd.read_csv(spam_file)
+df['label'] = 1
+df.dropna(inplace=True)
+
+# print(df)
+
+X_test = vectorizer.transform(df['content'])
+predictions = classifier.predict(X_test)
+
+# print(list(zip(predictions, df['label']))[:20])
 print(accuracy_score(predictions, df['label']))
 print(zero_one_loss(predictions, df['label']))
