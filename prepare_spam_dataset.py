@@ -31,10 +31,13 @@ def get_text_from_email(msg):
                 parts['content'] += payload
     
     if msg["Date"]:
-        e_date = email.utils.parsedate_tz(msg['Date'])
-        if e_date:
-            date = datetime.datetime.fromtimestamp(email.utils.mktime_tz(e_date))
-            parts['content'] += ' weekday_' +  str(date.weekday()) + ' hour_of_day_' + str(date.hour)
+        try:
+            e_date = email.utils.parsedate_tz(msg['Date'])
+            if e_date:
+                date = datetime.datetime.fromtimestamp(email.utils.mktime_tz(e_date))
+                parts['content'] += ' weekday_' +  str(date.weekday()) + ' hour_of_day_' + str(date.hour)
+        except Exception:
+            pass
     if msg['Subject']:
         parts['content'] += ' ' + msg['Subject']
     return parts
