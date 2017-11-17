@@ -3,6 +3,7 @@ import time;
 import datetime
 import logging
 import os
+import sys
 import numpy as np
 import pandas as pd
 import re
@@ -54,6 +55,19 @@ def plot_roc(y, y_pred, file_name):
     plt.savefig(file_name)
     plt.close()
 
+def print_top10(vectorizer, clf):
+        """Prints features with the highest coefficient values, per class"""
+        feature_names = vectorizer.get_feature_names()
+        top10 = np.argsort(clf.coef_[0])[-10:]
+        print("%s" % (" ".join(feature_names[j] for j in top10)))
+
+def show_most_informative_features(vectorizer, clf, n=20):
+    feature_names = vectorizer.get_feature_names()
+    coefs_with_fns = sorted(zip(clf.coef_[0], feature_names))
+    top = zip(coefs_with_fns[:n], coefs_with_fns[:-(n + 1):-1])
+    for (coef_1, fn_1), (coef_2, fn_2) in top:
+        print ("\t%.4f\t%-15s\t\t%.4f\t%-15s" % (coef_1, fn_1, coef_2, fn_2))
+
 ham_file = os.path.join(os.getcwd(),'Dataset', 'ham.csv')
 spam_file = os.path.join(os.getcwd(),'Dataset', 'spam.csv')
 
@@ -84,6 +98,14 @@ print('Training')
 classifier = LogisticRegression()
 classifier.fit(X_train, y_train)
 
+print('Informative features')
+show_most_informative_features(vectorizer, classifier)
+
+print('Top 10')
+print_top10(vectorizer, classifier) 
+
+print()
+print('Test set')
 
 X_test = vectorizer.transform(X_test_raw)
 predictions = classifier.predict(X_test)
@@ -93,6 +115,7 @@ print('zero_one_loss: {}'.format(zero_one_loss(predictions, y_test)))
 print('classification_report:\n{}'.format(classification_report(predictions, y_test)))
 print('confusion_matrix:\n{}'.format(confusion_matrix(predictions, y_test)))
 plot_roc(y_test, predictions, 'test.png')
+
 
 # Test lingspam database
 
