@@ -16,14 +16,14 @@ from nltk.corpus import stopwords
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer, ENGLISH_STOP_WORDS
 from sklearn.linear_model import LogisticRegression, SGDClassifier
 from sklearn import metrics 
-from sklearn.feature_selection import SelectFromModel
-from sklearn.svm import LinearSVC
-from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+# from sklearn.feature_selection import SelectFromModel
+# from sklearn.svm import LinearSVC
+# from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.cross_validation import cross_val_score
-from sklearn.grid_search import GridSearchCV
+# from sklearn.grid_search import GridSearchCV
 from sklearn.metrics import confusion_matrix, accuracy_score, zero_one_loss, classification_report, roc_curve, auc, roc_auc_score
 from sklearn.cross_validation import train_test_split
-from sklearn.decomposition import TruncatedSVD
+# from sklearn.decomposition import TruncatedSVD
 
 logging.basicConfig(format='%(levelname)s : %(message)s', level=logging.INFO)
 logging.root.level = logging.INFO
@@ -126,7 +126,7 @@ X_train = vectorizer.fit_transform(X_train_raw)
 
 print('Started training')
 
-classifier = LogisticRegression()
+classifier = LogisticRegression(solver='lbfgs')
 classifier.fit(X_train, y_train)
 
 print('Finished training\n')
