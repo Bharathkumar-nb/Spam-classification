@@ -1,14 +1,12 @@
 # Ignore everything
-
 *
-
 
 
 # Except
 
-
 !*.py
-
 !*.ipynb
 
+!Backup/*.py
+!Backup/*.ipynb
 !README.md
