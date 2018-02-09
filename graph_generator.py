@@ -15,6 +15,12 @@ for i in range(1, len(sys.argv)):
             if '_spam_on_' in line:
                 x = int(line.split('_spam_on_')[1][:4])
                 x_label.append(x)
+            elif '_spam1_on_' in line:
+                x = int(line.split('_spam_on_')[1][:4])
+                x_label.append(x)
+            elif '_spam2_on_' in line:
+                x = int(line.split('_spam_on_')[1][:4])
+                x_label.append(x)
             if 'accuracy_score' in line and len(y_label)<len(x_label):
                 y = round(float(line.split(' ')[1]),2)
                 y_label.append(y)

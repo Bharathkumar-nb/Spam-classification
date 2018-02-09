@@ -38,42 +38,6 @@ if len(sys.argv) < 2:
     print('Location of <files>: Dataset/csv_files/')
     sys.exit(0)
 
-def plot_roc(y, y_pred, y_pred_prob, file_name):
-    # Compute ROC curve and ROC area for each class
-    fpr = dict()
-    tpr = dict()
-    roc_auc = dict()
-    for i in range(2):
-        fpr[i], tpr[i], _ = roc_curve(y, y_pred)
-        roc_auc[i] = auc(fpr[i], tpr[i])
-    print('roc_auc_score: {}'.format(roc_auc_score(y, y_pred)))
-    
-    plt.figure()
-    lw = 2
-    plt.plot(fpr[1], tpr[1], color='darkorange',
-                     lw=lw, label='ROC curve (area = %0.2f)' % roc_auc[1])
-    del fpr, tpr, roc_auc
-    fpr = dict()
-    tpr = dict()
-    roc_auc = dict()
-    for i in range(2):
-        fpr[i], tpr[i], _ = roc_curve(y, y_pred_prob[:,1])
-        roc_auc[i] = auc(fpr[i], tpr[i])
-    print('roc_auc_score(prob): {}'.format(roc_auc_score(y, y_pred_prob[:,1])))
-    # Compute micro-average ROC curve and ROC area
-    plt.plot(fpr[1], tpr[1], color='darkgreen',
-                     lw=lw, label='ROC curve (area = %0.2f)' % roc_auc[1])
-    
-    plt.plot([0, 1], [0, 1], color='navy', lw=lw, linestyle='--')
-    plt.xlim([0.0, 1.0])
-    plt.ylim([0.0, 1.05])
-    plt.xlabel('False Positive Rate')
-    plt.ylabel('True Positive Rate')
-    plt.title('Receiver operating characteristic')
-    plt.legend(loc="lower right")
-    plt.savefig(file_name)
-    plt.close()
-
 def print_top20(vectorizer, clf):
     """Prints features with the highest coefficient values, per class"""
     feature_names = vectorizer.get_feature_names()
