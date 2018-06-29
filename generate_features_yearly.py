@@ -8,7 +8,10 @@ import pandas as pd
 from nltk.corpus import stopwords
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer, ENGLISH_STOP_WORDS
 from sklearn.linear_model import LogisticRegression
-from sklearn import metrics 
+from sklearn import metrics
+
+def eprint(*args, **kwargs):
+    print(*args, file=sys.stderr, **kwargs)
 
 
 def show_most_informative_features(vectorizer, clf, spam_file, n=30):
@@ -36,7 +39,7 @@ for subdir, dirs, files in os.walk(yearly_spam_folder):
         continue
     for spam_file in files:
         if spam_file not in skip_files:
-            print('file: {}'.format(spam_file))
+            eprint('file: {}'.format(spam_file))
             spam_df = pd.read_csv(os.path.join(subdir, spam_file), encoding='latin-1')
             spam_df.dropna(inplace=True)
             spam_df['label'] = 1
@@ -46,6 +49,7 @@ for subdir, dirs, files in os.walk(yearly_spam_folder):
             df = df.sample(frac=1)
 
             additional_stop_words = ['enron','vince','louise','attached','2000','2001','2002','2003','2004','2005','2006','2007','2008','2009','2010','2011','2012','2013','2014','2015','2016']
+            additional_stop_words += ['koi8', 'http', 'windows', 'utf', 'nbsp', 'bruceg']
             start_time = time.time()
             vectorizer = CountVectorizer(stop_words=ENGLISH_STOP_WORDS.union(additional_stop_words), ngram_range=(1, 2))
             y_train = df['label']
@@ -53,7 +57,7 @@ for subdir, dirs, files in os.walk(yearly_spam_folder):
             del df 
             classifier = LogisticRegression()
             classifier.fit(X_train, y_train)
-            print('Training time = {}'.format(time.time() - start_time))
+            eprint('Training time = {}'.format(time.time() - start_time))
             del X_train, y_train
             
             # print('Informative features')

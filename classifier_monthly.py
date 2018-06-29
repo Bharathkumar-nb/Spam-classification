@@ -88,6 +88,7 @@ X_train_raw = df['content']
 y_train = df['label']
 
 additional_stop_words = ['enron','vince','louise','attached','2000','2001','2002','2003','2004','2005','2006','2007','2008','2009','2010','2011','2012','2013','2014','2015','2016']
+additional_stop_words += ['koi8', 'http', 'windows', 'utf', 'nbsp']
 
 vectorizer = CountVectorizer(stop_words=ENGLISH_STOP_WORDS.union(additional_stop_words), ngram_range=(1, 2))
 X_train = vectorizer.fit_transform(X_train_raw)
